@@ -10,6 +10,6 @@
 
 @implementation Teacher
 +(NSString *)foreignKey{
-    return @"classNumber";
+    return NSStringFromSelector(@selector(classNumber));
 }
 @end

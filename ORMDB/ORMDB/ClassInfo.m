@@ -7,10 +7,21 @@
 //
 
 #import "ClassInfo.h"
+#import "NSObject+ORM.h"
 
 @implementation ClassInfo
 
-+(NSString *)primarilyKey{
-  return  @"classNumber";
++ (void)initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self createTable];
+    });
 }
++(NSArray<NSString *> *_Nonnull)sqlIgnoreColumn {
+    return @[NSStringFromSelector(@selector(id)), NSStringFromSelector(@selector(cid))];
+}
++(NSString *)primarilyKey{
+  return NSStringFromSelector(@selector(classNumber));
+}
+
 @end

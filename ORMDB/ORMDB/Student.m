@@ -10,9 +10,9 @@
 
 @implementation Student
 +(NSString *)foreignKey{
-  return @"classNumber";
+    return NSStringFromSelector(@selector(classNumber));
 }
 +(NSString *)primarilyKey{
-    return @"sid";
+    return NSStringFromSelector(@selector(sid));
 }
 @end

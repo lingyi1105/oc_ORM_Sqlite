@@ -140,6 +140,7 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding){
                 
                 for (unsigned int i = 0; i < propertyCount; i++) {
                     ORMDBClassPropertyInfo *property=[[ORMDBClassPropertyInfo alloc] initWithProperty:properties[i]];
+                    
                     if (ignoreColumn&&[ignoreColumn containsObject:property.name ]) {
                         continue;
                     }
@@ -186,7 +187,38 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding){
 @end
 
 @implementation ORM
-
++ (void)addColumn:(ORMDBClassPropertyInfo *)info table:(Class) cls {
+    [ORMDB columnExist:info.name table:[NSString stringWithFormat:@"%@", cls]];
+    NSString *sql=[NSString stringWithFormat:@"ALTER TABLE %@ ", cls];
+    switch (info.type) {
+        case ORMDBDataTypeNumber:
+        case ORMDBDataTypeInt:
+        case ORMDBDataTypeBool:{
+            sql=[NSString stringWithFormat:@"%@ ADD %@ integer",sql,info.name];
+        }
+            break;
+        case ORMDBDataTypeFloat:
+            sql=[NSString stringWithFormat:@"%@ ADD %@ float",sql,info.name];
+            break;
+        case ORMDBDataTypeDouble:
+        case ORMDBDataTypeNSDate:
+            sql=[NSString stringWithFormat:@"%@ ADD %@ double",sql,info.name];
+            break;
+        case ORMDBDataTypeString:
+        case ORMDBDataTypeDictionary:
+        case ORMDBDataTypeMutableDictionary:{
+            sql=[NSString stringWithFormat:@"%@ ADD %@ TEXT  DEFAULT NULL",sql,info.name];
+        }
+            break;
+        default:
+            sql=[NSString stringWithFormat:@"%@ ADD %@ TEXT  DEFAULT NULL",sql,info.name];
+            break;
+    }
+    
+    [ORMDB beginTransaction];
+    [ORMDB  execsql:sql];
+    [ORMDB commitTransaction];
+}
 + (void)createTableFromClass:(Class) cls{
     
     ORMDBClassInfo *obj=[ORMDBClassInfo metaWithClass:cls];
@@ -240,6 +272,24 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding){
     [ORMDB beginTransaction];
     [ORMDB  execsql:sql];
     [ORMDB commitTransaction];
+    
+    NSArray *columns = [ORMDB columns:NSStringFromClass(cls)];
+    for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+        if (info.foreignTableName) {
+            continue;
+        }
+        if (info.protocol) {
+            continue;
+        }else if(info.type==ORMDBDataTypeUnknown&&info.cls){
+            continue;
+        }
+        if (![columns containsObject:info.name]) {
+            [self addColumn:info table:cls];
+        }
+    }
+}
++ (void)getTableSchema:(Class) cls {
+    //pragma table_info('%@')
     
 }
 + (void)saveEntity:(id)entity with:(NSArray *)keys{

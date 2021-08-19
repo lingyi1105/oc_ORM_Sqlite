@@ -93,6 +93,52 @@ static dispatch_once_t onceToken;
     }
     return result;
 }
+/**查询判断是否存在字段**/
++(BOOL)columnExist:(NSString *)column table:(NSString *)table{
+    NSString *sql = [NSString stringWithFormat:@"pragma table_info('%@')", table];
+    BOOL result=FALSE;
+    if(showsql){
+        NSLog(@"%@",sql);
+    }
+    sqlite3_stmt *statement;
+    sqlite3 *queryDB;
+    if (sqlite3_open([DBPath UTF8String], &queryDB)== SQLITE_OK&&(sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil)==SQLITE_OK)  ) {
+        
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *nameData = (char *)sqlite3_column_text(statement, 1);
+            NSString *columnName =  [NSString stringWithUTF8String:nameData];
+            NSLog(@"columnName: %@", columnName);
+            if ([column isEqualToString:columnName]) {
+                result = TRUE;
+                break;
+            }
+        }
+        
+        sqlite3_finalize(statement);
+    }
+    return result;
+}
++(NSArray *)columns:(NSString *)table {
+    NSString *sql = [NSString stringWithFormat:@"pragma table_info('%@')", table];
+    NSMutableArray *arr = [NSMutableArray array];
+    if(showsql){
+        NSLog(@"%@",sql);
+    }
+    sqlite3_stmt *statement;
+    sqlite3 *queryDB;
+    if (sqlite3_open([DBPath UTF8String], &queryDB)== SQLITE_OK&&(sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil)==SQLITE_OK)  ) {
+        
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            char *nameData = (char *)sqlite3_column_text(statement, 1);
+            NSString *columnName =  [NSString stringWithUTF8String:nameData];
+            NSLog(@"columnName: %@", columnName);
+            [arr addObject:columnName];
+        }
+        
+        sqlite3_finalize(statement);
+    }
+    return [arr copy];
+}
 + (NSMutableDictionary *)queryWithSql:(NSString *)sql{
     NSMutableDictionary *returnDic=[[NSMutableDictionary alloc] init];
     sqlite3 *queryDB;

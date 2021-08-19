@@ -36,5 +36,6 @@
 +(void)execsql:(NSString *)sql;
 +(void)saveObject:(id)object withSql:(NSString *)sql;
 +(BOOL)rowExist:(NSString *)sql;
-
++(BOOL)columnExist:(NSString *)column table:(NSString *)table;
++(NSArray *)columns:(NSString *)table;
 @end
