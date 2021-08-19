@@ -4,3 +4,6 @@ ORMDB/.DS_Store
 ORMDB/ORMDB.xcodeproj/project.xcworkspace/xcuserdata/maopenglin.xcuserdatad/UserInterfaceState.xcuserstate
 
 ORMDB/ORMDB.xcodeproj/xcuserdata/maopenglin.xcuserdatad/xcdebugger/Breakpoints_v2.xcbkptlist
+
+.idea/
+.DS_Store

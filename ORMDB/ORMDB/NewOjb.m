@@ -7,9 +7,19 @@
 //
 
 #import "NewOjb.h"
+#import "NSObject+ORM.h"
 
 @implementation NewOjb
-+ (NSString *)primarilyKey {
-    return @"aaa";
+
++ (void)initialize {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self createTable];
+    });
 }
+
++ (NSString *)primarilyKey {
+    return NSStringFromSelector(@selector(num));
+}
+
 @end

@@ -61,6 +61,12 @@ static dispatch_once_t onceToken;
     });
 }
 
++ (void)deleteObject:(NSArray *)keys withValue:(NSArray *)value {
+    dispatch_sync(_queue, ^() {
+        [ORM deleteObject:[self class] withKeys:keys andValues:value];
+    });
+}
+
 + (void)execSql:(void (^)(SqlOperationQueueObject *db))block {
     dispatch_sync(_queue, ^() {
         [ORMDB beginTransaction];
@@ -69,6 +75,16 @@ static dispatch_once_t onceToken;
         [ORMDB commitTransaction];
     });
 
+}
+
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement {
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", [self class], requirement];
+    return [ORMDB queryDB:[self class] andSql:sql];
+}
+
++ (NSMutableDictionary *)queryForDictionaryWhere:(NSString *)requirement {
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", [self class], requirement];
+    return [ORMDB queryWithSql:sql];
 }
 
 + (NSMutableArray *)queryForObjectArray:(NSString *)sql {

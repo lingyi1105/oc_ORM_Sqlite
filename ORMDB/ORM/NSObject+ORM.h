@@ -59,7 +59,12 @@
  **/
 + (void)clearTable;
 
-+ (void)clearTable:(NSArray *)keys withValue:(NSArray *)value;
+/**
+ 删除数据
+ **/
++ (void)deleteObject:(NSArray *)keys withValue:(NSArray *)value;
++ (void)clearTable:(NSArray *)keys withValue:(NSArray *)value DEPRECATED_MSG_ATTRIBUTE("use deleteObject:withValue instead");
+
 
 /**
  保存列表集合数据
@@ -69,30 +74,45 @@
 + (void)saveListData:(NSArray *)keys
             andBlock:(void (^)(NSMutableArray *datas))block;
 
+/**
+ 自定义sql requirement查询，并返回封装对象的结果 集合
+ **/
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement;
+/**
+    只返回 一行查询结果，通过字段名字取值
+ 
+    NSMutableDictionary *result= [XXX queryForDictionaryWhere:@"id = 1"];
+ 
+    result[@"columnName"];
+ */
++ (NSMutableDictionary *)queryForDictionaryWhere:(NSString *)requirement;
 
 /**
  自定义sql查询，并返回封装对象的结果 集合
  **/
-+ (NSMutableArray *)queryForObjectArray:(NSString *)sql;
++ (NSMutableArray *)queryForObjectArray:(NSString *)sql DEPRECATED_MSG_ATTRIBUTE("use queryForObjectArrayWhere instead");
 
 /**
 	只返回 一行查询结果，通过字段名字取值
  
-	NSMutableDictionary *result= [XXX queryWithSql:@"select * from User"];
+	NSMutableDictionary *result= [XXX queryForDictionary:@"select * from User"];
  
 	result[@"columnName"];
  */
-+ (NSMutableDictionary *)queryForDictionary:(NSString *)sql;
++ (NSMutableDictionary *)queryForDictionary:(NSString *)sql DEPRECATED_MSG_ATTRIBUTE("use queryForDictionaryWhere instead");
 
 /**
  执行自定义 sql  update/insert
  **/
 
 + (void)execSql:(void (^)(SqlOperationQueueObject *db))block;
+
 @end
 
 @interface NSArray (ORM)
+
 - (void)saveListDataWithKeys:(NSArray *)keys;
+
 @end
 
 

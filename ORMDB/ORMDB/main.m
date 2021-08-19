@@ -33,11 +33,10 @@ int main(int argc, const char *argv[]) {
         dispatch_queue_t dispatchQueue = dispatch_queue_create("com.queue.test", DISPATCH_QUEUE_CONCURRENT);
         dispatch_group_t dispatchGroup = dispatch_group_create();
 
-#if 0
-        //        [ClassInfo createTable];
-                [ClassInfo clearTable];
-                [Student clearTable];
-                [Teacher clearTable];
+#if 1
+//                [ClassInfo clearTable];
+//                [Student clearTable];
+//                [Teacher clearTable];
 #else
         ClassInfo *classInfo = [[ClassInfo alloc] init];
         classInfo.className = @"三班";
@@ -72,26 +71,78 @@ int main(int argc, const char *argv[]) {
 #endif
 
 
-//        [Test createTable];
-//        [NewOjb createTable];
+#if 0
+        for (int i=0; i<10; i++) {
+            dispatch_async(dispatch_queue_create("abc", DISPATCH_QUEUE_SERIAL), ^{
+                NewOjb *n1=[[NewOjb alloc] init];
+                n1.num=@(i+100);
+                n1.str=[@"n1.str" stringByAppendingFormat:@"%04x", i];
+                n1.name=[@"n1.name" stringByAppendingFormat:@"%04x", i];
+                n1.age=@(i+1);
+                n1.address=[@"n1.address" stringByAppendingFormat:@"%08x", i];
+                n1.timestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+                n1.timestampios = [[NSDate date] timeIntervalSince1970];
+                [n1 save:@[NSStringFromSelector(@selector(num))]];
 
-//        for (int i=0; i<2000; i++) {
-//            dispatch_async(dispatch_queue_create("abc", DISPATCH_QUEUE_SERIAL), ^{
-//                NewOjb *n1=[[NewOjb alloc] init];
-//                n1.aaa=@(1);
-//                n1.bbb=@"ccc";
-//                [n1 save:@[@"aaa"]];
-//
-//                NewOjb *n2=[[NewOjb alloc] init];
-//                n2.aaa=@(1);
-//                n2.bbb=@"ddd";
-//                [n2 save:@[@"aaa"]];
-//                [ORMDB queryDB:[NewOjb class] andSql:@"select * from NewOjb"];
-//
-//            });
-//            [ORMDB queryDB:[NewOjb class] andSql:@"select * from NewOjb"];
-//        }
-//
+                NewOjb *n2=[[NewOjb alloc] init];
+                n2.num=@(i);
+                n2.str=[@"n2.str" stringByAppendingFormat:@"%04x", i];
+                n2.name=[@"n2.name" stringByAppendingFormat:@"%04x", i];
+                n2.age=@(i+2);
+                n2.address=[@"n2.address" stringByAppendingFormat:@"%08x", i];
+                n2.remark = @"n2 remark";
+                n2.timestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+                n2.timestampios = [[NSDate date] timeIntervalSince1970];
+                [n2 save:@[NSStringFromSelector(@selector(num))]];
+//                NSArray * arr = [ORMDB queryDB:[NewOjb class] andSql:@"select * from NewOjb"];
+//                NSLog(@"arr: %@", arr);
+
+            });
+//            NSArray * arr = [ORMDB queryDB:[NewOjb class] andSql:@"select * from NewOjb"];
+//            NSLog(@"arr: %@", arr);
+        }
+#else
+        NSArray * arr = [ORMDB queryDB:[NewOjb class] andSql:@"select * from NewOjb"];
+        NSLog(@"arr: %@", arr);
+        
+        NewOjb *newobj = [NewOjb getObject:@[NSStringFromSelector(@selector(num))] withValue:@[@(103)]];
+        NSLog(@"newobj: %@", newobj);
+        
+        NewOjb *newobj1 = [NewOjb getObject:@[NSStringFromSelector(@selector(num)), NSStringFromSelector(@selector(remark))] withValue:@[@(103), @"n2 remark"]];
+        NSLog(@"newobj1: %@", newobj1);
+        
+        NewOjb *newobj2 = [NewOjb getObject:@[NSStringFromSelector(@selector(num)), NSStringFromSelector(@selector(remark))] withValue:@[@(3), @"n2 remark"]];
+        NSLog(@"newobj2: %@", newobj2);
+        
+        NSArray *arr2 = [NewOjb list:@[NSStringFromSelector(@selector(remark))] withValue:@[@"n2 remark"]];
+        NSLog(@"arr2: %@", arr2);
+        
+        NSArray *arr3 = [NewOjb list:@[NSStringFromSelector(@selector(num)), NSStringFromSelector(@selector(remark))] withValue:@[@(103), @"n2 remark"]];
+        NSLog(@"arr3: %@", arr3);
+        
+//        [NewOjb clearTable:@[NSStringFromSelector(@selector(remark))] withValue:@[@"n2 remark"]];
+//        [NewOjb deleteObject:@[NSStringFromSelector(@selector(num))] withValue:@[@(103)]];
+        
+        //@"SELECT num,str,age,name,address,remark,timestamp,timestampios FROM  NewOjb WHERE num = 103 "
+        //@"SELECT * FROM NewOjb WHERE remark != NULL"
+        NSString *sql = [@"SELECT * FROM " stringByAppendingFormat:@"%@ WHERE remark != ''", NSStringFromClass([NewOjb class])];
+        NSArray *array = [NewOjb queryForObjectArray:sql];
+        NSLog(@"array: %@", array);
+        
+        NSString *sql1 = @"remark != ''";
+        NSArray *array1 = [NewOjb queryForObjectArrayWhere:sql1];
+        NSLog(@"array1: %@", array1);
+        
+        NSDictionary *dic = [NewOjb queryForDictionary:sql];
+        NSLog(@"dic: %@", dic);
+        
+        NSDictionary *dic1 = [NewOjb queryForDictionaryWhere:sql1];
+        NSLog(@"dic1: %@", dic1);
+        
+        NSLog(@"");
+#endif
+
+//        [Test createTable];
 //    for(int i=0;i<20;i++){
 //        dispatch_group_async(dispatchGroup, dispatchQueue, ^{
 //            ClassInfo *classInfo=[[ClassInfo alloc] init];
@@ -170,7 +221,7 @@ int main(int argc, const char *argv[]) {
 //        });
 
 
-        //  sleep(10);
+          sleep(10);
     }
     return 0;
 }

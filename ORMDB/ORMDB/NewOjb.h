@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface NewOjb : NSObject
-@property(nonatomic, strong) NSNumber *aaa;
-@property(nonatomic, strong) NSString *bbb;
+@property(nonatomic, strong) NSNumber *num;
+@property(nonatomic, strong) NSString *str;
+@property(nonatomic, strong) NSNumber *age;
+@property(nonatomic, strong) NSString *name;
+@property(nonatomic, strong) NSString *address;
+@property(nonatomic, strong) NSString *remark;
+@property(nonatomic, assign) NSUInteger timestamp;
+@property(nonatomic, assign) NSTimeInterval timestampios;
 @end
