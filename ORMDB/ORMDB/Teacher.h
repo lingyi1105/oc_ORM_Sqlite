@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface Teacher : NSObject
-@property(nonatomic,strong)NSString *name;
-@property(nonatomic,strong)NSNumber *classNumber;
-@property (nonatomic,assign)int tid;
+@property(nonatomic, strong) NSString *name;
+@property(nonatomic, strong) NSNumber *classNumber;
+@property(nonatomic, assign) int tid;
 @end

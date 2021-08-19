@@ -9,10 +9,11 @@
 #import "Student.h"
 
 @implementation Student
-+(NSString *)foreignKey{
++ (NSString *)foreignKey {
     return NSStringFromSelector(@selector(classNumber));
 }
-+(NSString *)primarilyKey{
+
++ (NSString *)primarilyKey {
     return NSStringFromSelector(@selector(sid));
 }
 @end

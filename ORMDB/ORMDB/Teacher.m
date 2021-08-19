@@ -9,7 +9,7 @@
 #import "Teacher.h"
 
 @implementation Teacher
-+(NSString *)foreignKey{
++ (NSString *)foreignKey {
     return NSStringFromSelector(@selector(classNumber));
 }
 @end

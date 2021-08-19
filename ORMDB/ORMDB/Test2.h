@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Student.h"
+
 @interface Test2 : Student
 
 @end

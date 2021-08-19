@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Test2.h"
+
 @interface Test : NSObject
-@property(nonatomic,assign)int one;
-@property(nonatomic,strong) Test2 *test;
+@property(nonatomic, assign) int one;
+@property(nonatomic, strong) Test2 *test;
 @end

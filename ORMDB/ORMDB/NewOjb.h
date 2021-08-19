@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NewOjb : NSObject
-@property (nonatomic,strong)NSNumber *aaa;
-@property (nonatomic,strong)NSString *bbb;
+@property(nonatomic, strong) NSNumber *aaa;
+@property(nonatomic, strong) NSString *bbb;
 @end

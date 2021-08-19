@@ -9,10 +9,13 @@
 #import "Test.h"
 
 @implementation Test
-+(NSString *)primarilyKey{
-    return  @"one";
++ (NSString *)primarilyKey {
+    return @"one";
 }
-+(NSDictionary<NSString *, NSString *> *_Nonnull)foreignKeyNotCreateTable{
-    return @{@"test":@"Student"};
+
++ (NSDictionary
+
+<NSString *, NSString *> *_Nonnull)foreignKeyNotCreateTable{
+    return @{@"test": @"Student"};
 }
 @end

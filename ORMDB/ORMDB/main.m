@@ -15,65 +15,66 @@
 #import "Test.h"
 #import "Test2.h"
 #import "ORMDB.h"
-double t(double last, char* key){
+
+double t(double last, char *key) {
     clock_t now = clock();
-    printf("time:%fs \t key:%s \n", (last != 0) ? (double)(now - last) / CLOCKS_PER_SEC : 0, key);
+    printf("time:%fs \t key:%s \n", (last != 0) ? (double) (now - last) / CLOCKS_PER_SEC : 0, key);
     return now;
 }
 
 
-int main(int argc, const char * argv[]) {
+int main(int argc, const char *argv[]) {
     @autoreleasepool {
-    
+
         [ORMDB configDBPath:@"/Users/Shared/test.db"];
-        
+
         //return 0;
-        
+
         dispatch_queue_t dispatchQueue = dispatch_queue_create("com.queue.test", DISPATCH_QUEUE_CONCURRENT);
         dispatch_group_t dispatchGroup = dispatch_group_create();
-        
+
 #if 0
-//        [ClassInfo createTable];
-        [ClassInfo clearTable];
-        [Student clearTable];
-        [Teacher clearTable];
+        //        [ClassInfo createTable];
+                [ClassInfo clearTable];
+                [Student clearTable];
+                [Teacher clearTable];
 #else
-        ClassInfo *classInfo=[[ClassInfo alloc] init];
-        classInfo.className=@"三班";
-        classInfo.roomId=120;
-        classInfo.classNumber=@(5);
-        classInfo.id=9;
-        classInfo.classAddress=@"北京市海淀区";
-        classInfo.dataInfo=@{@"a":@"aa", @"b":@"bb", @"c":@"cc", @"d":@"dd"};
+        ClassInfo *classInfo = [[ClassInfo alloc] init];
+        classInfo.className = @"三班";
+        classInfo.roomId = 120;
+        classInfo.classNumber = @(5);
+        classInfo.id = 9;
+        classInfo.classAddress = @"北京市海淀区";
+        classInfo.dataInfo = @{@"a": @"aa", @"b": @"bb", @"c": @"cc", @"d": @"dd"};
         classInfo.addOne = 11;
         classInfo.addTwo = 22;
         classInfo.add5 = 0x44;
 
 
-        Student *one=[[Student alloc] init];
-        one.name=@"小红";
-        one.age=15;
-        one.sid=100;
+        Student *one = [[Student alloc] init];
+        one.name = @"小红";
+        one.age = 15;
+        one.sid = 100;
 
-        Student *two=[[Student alloc] init];
-        two.name=@"小民";
-        two.age=18;
-        two.sid=102;
+        Student *two = [[Student alloc] init];
+        two.name = @"小民";
+        two.age = 18;
+        two.sid = 102;
 
-        Teacher *teacher=[[Teacher alloc] init];
-        teacher.name=@"班主任";
+        Teacher *teacher = [[Teacher alloc] init];
+        teacher.name = @"班主任";
 
-        classInfo.student=@[one,two].copy;
-        classInfo.teacher=teacher;
+        classInfo.student = @[one, two].copy;
+        classInfo.teacher = teacher;
 //        classInfo.version = 111;
 
         [classInfo save:@[NSStringFromSelector(@selector(classNumber))]];
 #endif
-        
-     
+
+
 //        [Test createTable];
 //        [NewOjb createTable];
-        
+
 //        for (int i=0; i<2000; i++) {
 //            dispatch_async(dispatch_queue_create("abc", DISPATCH_QUEUE_SERIAL), ^{
 //                NewOjb *n1=[[NewOjb alloc] init];
@@ -154,7 +155,7 @@ int main(int argc, const char * argv[]) {
 //
 //        NSArray *arr= [ORMDB queryDB:[NewOjb class] andSql:@"SELECT * FROM NewOjb"];
 //        NSLog(@"arr.count:%@",arr);
-        
+
 //        dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^{
 //            NSLog(@"=3333===");
 //            NewOjb *n1=[[NewOjb alloc] init];
@@ -167,9 +168,9 @@ int main(int argc, const char * argv[]) {
 //            n2.bbb=@"ddd";
 //            [n2 save:@[@"aaa"]];
 //        });
-        
-        
-      //  sleep(10);
+
+
+        //  sleep(10);
     }
     return 0;
 }

@@ -17,11 +17,15 @@
         [self createTable];
     });
 }
-+(NSArray<NSString *> *_Nonnull)sqlIgnoreColumn {
+
++ (NSArray
+
+<NSString *> *_Nonnull)sqlIgnoreColumn {
     return @[NSStringFromSelector(@selector(id)), NSStringFromSelector(@selector(cid))];
 }
-+(NSString *)primarilyKey{
-  return NSStringFromSelector(@selector(classNumber));
+
++ (NSString *)primarilyKey {
+    return NSStringFromSelector(@selector(classNumber));
 }
 
 @end

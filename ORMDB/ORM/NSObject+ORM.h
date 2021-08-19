@@ -29,12 +29,13 @@
 - (BOOL)rowExist:(NSString *)sql;
 @end
 
-@interface NSObject(Extensions)
+@interface NSObject (Extensions)
 /**
  创建表
  
  **/
 + (void)createTable;
+
 /**
  保存数据
  @param keyes 数据保存参数条件
@@ -90,7 +91,7 @@
 + (void)execSql:(void (^)(SqlOperationQueueObject *db))block;
 @end
 
-@interface NSArray(ORM)
+@interface NSArray (ORM)
 - (void)saveListDataWithKeys:(NSArray *)keys;
 @end
 

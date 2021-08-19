@@ -9,7 +9,7 @@
 #import "NewOjb.h"
 
 @implementation NewOjb
-+(NSString *)primarilyKey{
-    return  @"aaa";
++ (NSString *)primarilyKey {
+    return @"aaa";
 }
 @end

@@ -10,9 +10,10 @@
 
 @protocol Student
 @end
+
 @interface Student : NSObject
-@property(nonatomic,strong)NSString *name;
-@property(nonatomic,assign)int age;
-@property(nonatomic,strong)NSNumber *classNumber;
-@property (nonatomic,assign)int sid;
+@property(nonatomic, strong) NSString *name;
+@property(nonatomic, assign) int age;
+@property(nonatomic, strong) NSNumber *classNumber;
+@property(nonatomic, assign) int sid;
 @end
