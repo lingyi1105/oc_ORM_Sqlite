@@ -77,8 +77,18 @@ static dispatch_once_t onceToken;
 
 }
 
++ (BOOL)rowExist:(NSString *)requirement {//SELECT * FROM NewOjb WHERE num = 100  ;
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", [self class], requirement];
+    return [ORMDB rowExistPro:sql];
+}
+
 + (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement {
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", [self class], requirement];
+    return [ORMDB queryDB:[self class] andSql:sql];
+}
+
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement orderBy:(NSString *)description {
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ ORDER BY %@", [self class], requirement, description];
     return [ORMDB queryDB:[self class] andSql:sql];
 }
 

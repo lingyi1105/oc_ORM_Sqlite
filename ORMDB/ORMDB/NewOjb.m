@@ -19,7 +19,8 @@
 }
 
 + (NSString *)primarilyKey {
-    return NSStringFromSelector(@selector(num));
+    return NSStringFromSelector(@selector(id));
+//    return NSStringFromSelector(@selector(nid));
 }
 
 @end

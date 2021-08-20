@@ -44,6 +44,8 @@
 
 + (BOOL)rowExist:(NSString *)sql;
 
++ (BOOL)rowExistPro:(NSString *)sql;
+
 + (BOOL)columnExist:(NSString *)column table:(NSString *)table;
 
 + (NSArray *)columns:(NSString *)table;

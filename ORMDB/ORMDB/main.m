@@ -10,6 +10,7 @@
 
 #import "ClassInfo.h"
 #import "NewOjb.h"
+#import "NewOjbSubInfo.h"
 
 #import "NSObject+ORM.h"
 #import "Test.h"
@@ -74,7 +75,10 @@ int main(int argc, const char *argv[]) {
 #if 0
         for (int i=0; i<10; i++) {
             dispatch_async(dispatch_queue_create("abc", DISPATCH_QUEUE_SERIAL), ^{
+                
                 NewOjb *n1=[[NewOjb alloc] init];
+                n1.id = @(i + 100);
+                n1.nid = i + 100;
                 n1.num=@(i+100);
                 n1.str=[@"n1.str" stringByAppendingFormat:@"%04x", i];
                 n1.name=[@"n1.name" stringByAppendingFormat:@"%04x", i];
@@ -82,9 +86,26 @@ int main(int argc, const char *argv[]) {
                 n1.address=[@"n1.address" stringByAppendingFormat:@"%08x", i];
                 n1.timestamp = [[NSDate date] timeIntervalSince1970] * 1000;
                 n1.timestampios = [[NSDate date] timeIntervalSince1970];
+                
+                NewOjbSubInfo * subInfo1 = [NewOjbSubInfo new];
+                subInfo1.id = n1.id;
+                subInfo1.nid = n1.nid;
+                subInfo1.sid = n1.id.intValue;
+                subInfo1.title = [@"subInfo1.title" stringByAppendingFormat:@"%08x", i];
+                subInfo1.content=[@"subInfo1.content" stringByAppendingFormat:@"%08x", i];
+                NewOjbSubInfo * subInfo2 = [NewOjbSubInfo new];
+                subInfo2.id = n1.id;
+                subInfo2.nid = n1.nid;
+                subInfo2.sid = n1.id.intValue + 100;
+                subInfo2.title = [@"subInfo2.title" stringByAppendingFormat:@"%08x", i];
+                subInfo2.content=[@"subInfo2.content" stringByAppendingFormat:@"%08x", i];
+                n1.subInfo = @[subInfo1, subInfo2].copy;
+                
                 [n1 save:@[NSStringFromSelector(@selector(num))]];
 
                 NewOjb *n2=[[NewOjb alloc] init];
+                n2.id = @(i);
+                n2.nid = i;
                 n2.num=@(i);
                 n2.str=[@"n2.str" stringByAppendingFormat:@"%04x", i];
                 n2.name=[@"n2.name" stringByAppendingFormat:@"%04x", i];
@@ -133,11 +154,18 @@ int main(int argc, const char *argv[]) {
         NSArray *array1 = [NewOjb queryForObjectArrayWhere:sql1];
         NSLog(@"array1: %@", array1);
         
+        NSString *sql2 = @"id != ''";
+        NSArray *array2 = [NewOjb queryForObjectArrayWhere:sql2 orderBy:@"age asc, id desc"];
+        NSLog(@"array2: %@", array2);
+        
         NSDictionary *dic = [NewOjb queryForDictionary:sql];
         NSLog(@"dic: %@", dic);
         
         NSDictionary *dic1 = [NewOjb queryForDictionaryWhere:sql1];
         NSLog(@"dic1: %@", dic1);
+        
+        BOOL result = [NewOjb rowExist:@"id = 100"];
+        NSLog(@"result: %@", @(result));
         
         NSLog(@"");
 #endif

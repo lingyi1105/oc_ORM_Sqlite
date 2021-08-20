@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		783BD52026CF4C8D003CB7C9 /* NewOjbSubInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 783BD51F26CF4C8D003CB7C9 /* NewOjbSubInfo.m */; };
 		993600AB1EF0D935005F7450 /* ORMDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 993600A51EF0D935005F7450 /* ORMDB.m */; };
 		993600AC1EF0D935005F7450 /* ORM.m in Sources */ = {isa = PBXBuildFile; fileRef = 993600A71EF0D935005F7450 /* ORM.m */; };
 		993600AD1EF0D935005F7450 /* NSObject+ORM.m in Sources */ = {isa = PBXBuildFile; fileRef = 993600A91EF0D935005F7450 /* NSObject+ORM.m */; };
@@ -33,6 +34,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		783BD51E26CF4C8D003CB7C9 /* NewOjbSubInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewOjbSubInfo.h; sourceTree = "<group>"; };
+		783BD51F26CF4C8D003CB7C9 /* NewOjbSubInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewOjbSubInfo.m; sourceTree = "<group>"; };
 		993600A51EF0D935005F7450 /* ORMDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORMDB.m; sourceTree = "<group>"; };
 		993600A61EF0D935005F7450 /* ORMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORMDB.h; sourceTree = "<group>"; };
 		993600A71EF0D935005F7450 /* ORM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORM.m; sourceTree = "<group>"; };
@@ -102,6 +105,8 @@
 				999097051EE996C900FCA043 /* Test2.m */,
 				99B7C8501EEA3BCA00C3CED8 /* NewOjb.h */,
 				99B7C8511EEA3BCA00C3CED8 /* NewOjb.m */,
+				783BD51E26CF4C8D003CB7C9 /* NewOjbSubInfo.h */,
+				783BD51F26CF4C8D003CB7C9 /* NewOjbSubInfo.m */,
 			);
 			path = ORMDB;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 99B8DECE1DE5B0160041AF8C;
@@ -180,6 +186,7 @@
 				993600AD1EF0D935005F7450 /* NSObject+ORM.m in Sources */,
 				999097091EE9976B00FCA043 /* Test.m in Sources */,
 				993600AC1EF0D935005F7450 /* ORM.m in Sources */,
+				783BD52026CF4C8D003CB7C9 /* NewOjbSubInfo.m in Sources */,
 				999097061EE996C900FCA043 /* Test2.m in Sources */,
 				99B7C8521EEA3BCA00C3CED8 /* NewOjb.m in Sources */,
 				99B8DEDB1DE5B0160041AF8C /* main.m in Sources */,

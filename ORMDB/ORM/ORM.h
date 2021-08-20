@@ -189,10 +189,7 @@ sqlIgnoreColumn;
 	return @{@"conversation_user":@"EXUPersonInfo"};
  }
  **/
-+ (NSDictionary
-
-<NSString *, NSString *> *_Nonnull)
-foreignKeyNotCreateTable;
++ (NSDictionary<NSString *, NSString *> *_Nonnull)foreignKeyNotCreateTable;
 @end
 
 @interface ORM : NSObject

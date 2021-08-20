@@ -535,10 +535,8 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
 
     NSMethodSignature *foreignSignature = [[cls class] methodSignatureForSelector:foreignSelector];
     if (foreignSignature) {
-        NSString * foreignKey = ((NSString * (*)(id, SEL))(
-        void *) objc_msgSend)((id) [cls class], foreignSelector);
-        NSString * primarilyKey = ((NSString * (*)(id, SEL))(
-        void *) objc_msgSend)((id) [entity class], NSSelectorFromString(@"primarilyKey"));
+        NSString * foreignKey = ((NSString * (*)(id, SEL))(void *) objc_msgSend)((id) [cls class], foreignSelector);
+        NSString * primarilyKey = ((NSString * (*)(id, SEL))(void *) objc_msgSend)((id) [entity class], NSSelectorFromString(@"primarilyKey"));
         id primarilyKeyValue = ((id (*)(id, SEL)) (void *) objc_msgSend)((id) entity, NSSelectorFromString(primarilyKey));
         NSString *ucfirstName = [foreignKey stringByReplacingCharactersInRange:NSMakeRange(0, 1)
                                                                     withString:[[foreignKey substringToIndex:1] uppercaseString]];

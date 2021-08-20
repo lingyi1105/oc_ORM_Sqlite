@@ -97,6 +97,23 @@ static dispatch_once_t onceToken;
     return result;
 }
 
++ (BOOL)rowExistPro:(NSString *)sql {
+    BOOL result = FALSE;
+    if (showsql) {
+        NSLog(@"%@", sql);
+    }
+    sqlite3_stmt *statement;
+    sqlite3 *queryDB;
+    if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
+
+        if (sqlite3_step(statement) == SQLITE_ROW) {
+            result = TRUE;
+        }
+        sqlite3_finalize(statement);
+    }
+    return result;
+}
+
 /**查询判断是否存在字段**/
 + (BOOL)columnExist:(NSString *)column table:(NSString *)table {
     NSString *sql = [NSString stringWithFormat:@"pragma table_info('%@')", table];

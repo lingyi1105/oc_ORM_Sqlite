@@ -71,13 +71,26 @@
  @param keys 参数条件
  @param block 回调参数
  **/
-+ (void)saveListData:(NSArray *)keys
-            andBlock:(void (^)(NSMutableArray *datas))block;
++ (void)saveListData:(NSArray *)keys andBlock:(void (^)(NSMutableArray *datas))block;
+
+/**
+ 自定义sql requirement查询 数据是否村子
+ 例：[CLS rowExist:@"gender = 'man' and age = '20'"]
+ **/
++ (BOOL)rowExist:(NSString *)requirement;
 
 /**
  自定义sql requirement查询，并返回封装对象的结果 集合
+ 例：[CLS queryForObjectArrayWhere:@"gender = 'man' and age = '20'"]
  **/
 + (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement;
+
+/**
+ 自定义sql requirement查询 description排序，并返回封装对象的结果 集合
+ 例：[CLS queryForObjectArrayWhere:@"gender = 'man' and age = '20'" orderBy:@"id desc, birthday asc"]
+ **/
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement orderBy:(NSString *)description;
+
 /**
     只返回 一行查询结果，通过字段名字取值
  
