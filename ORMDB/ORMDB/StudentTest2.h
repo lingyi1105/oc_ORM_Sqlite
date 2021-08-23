@@ -1,5 +1,5 @@
 //
-//  Test2.h
+//  StudentTest2.h
 //  ORMDB
 //
 //  Created by mao PengLin on 2017/6/8.
@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Student.h"
 
-@interface Test2 : Student
+@interface StudentTest2 : Student
 
 @end

@@ -7,8 +7,6 @@
 //
 
 #import "NSObject+ORM.h"
-#import "ORM.h"
-#import "ORMDB.h"
 
 @implementation NSObject (Extensions)
 static dispatch_queue_t _queue;

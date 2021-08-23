@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ORM.h"
+#import "ORMDB.h"
 
 @interface SqlOperationQueueObject : NSObject
 /**
