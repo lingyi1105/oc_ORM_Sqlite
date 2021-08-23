@@ -70,93 +70,59 @@ ORMDBNumberCreateFromID(__unsafe_unretained id _Nullable value) {
     return nil;
 }
 
-static force_inline NSString *_Nullable
-createWhereStatement(NSArray
-*
-_Nullable key, NSArray
-*
-_Nullable value
-){
-NSString *whereSql = @"";
-for (
-int i = 0;
-i<key.
-count;
-i++) {
-NSString *type = [NSString stringWithFormat:@"%@", [value[i] class]];
-
-if (i==0) {
-if ([
-type hasSuffix
-:@"NSCFNumber"]||[
-type hasSuffix
-:@"NSCFBoolean"]) {
-if ([
-type hasSuffix
-:@"NSCFNumber"]) {
-NSNumber *number = value[i];
-if(
-CFNumberIsFloatType((CFNumberRef)
-number))
-{
-whereSql = [NSString stringWithFormat:@"WHERE %@ = %@ ", key[i], value[i]];
-}else{
-whereSql = [NSString stringWithFormat:@"WHERE %@ = %i ", key[i], [value[i] intValue]];
-}
-}else{
-whereSql = [NSString stringWithFormat:@"WHERE %@ = %i ", key[i], [value[i] intValue]];
-}
-}
-else{
-whereSql = [NSString stringWithFormat:@"WHERE %@ = '%@' ", key[i], value[i]];
-}
-}else{
-if ([
-type hasSuffix
-:@"NSCFNumber"]||[
-type hasSuffix
-:@"NSCFBoolean"]) {
-if ([
-type hasSuffix
-:@"NSCFNumber"]) {
-NSNumber *number = value[i];
-if(
-CFNumberIsFloatType((CFNumberRef)
-number)){
-whereSql = [NSString stringWithFormat:@"%@ AND  %@ = %@  ", whereSql, key[i], value[i]];
-}else{
-whereSql = [NSString stringWithFormat:@"%@ AND  %@ = %i  ", whereSql, key[i], [value[i] intValue]];
+static force_inline NSString *_Nullable createWhereStatement(NSArray * _Nullable key, NSArray * _Nullable value) {
+    NSString *whereSql = @"";
+    for (int i = 0; i<key.count; i++) {
+        NSString *type = [NSString stringWithFormat:@"%@", [value[i] class]];
+        if (i==0) {
+            if ([type hasSuffix:@"NSCFNumber"]||[type hasSuffix:@"NSCFBoolean"]) {
+                if ([type hasSuffix:@"NSCFNumber"]) {
+                    NSNumber *number = value[i];
+                    if(CFNumberIsFloatType((CFNumberRef) number)) {
+                        whereSql = [NSString stringWithFormat:@"WHERE %@ = %@ ", key[i], value[i]];
+                    } else {
+                        whereSql = [NSString stringWithFormat:@"WHERE %@ = %i ", key[i], [value[i] intValue]];
+                    }
+                } else {
+                    whereSql = [NSString stringWithFormat:@"WHERE %@ = %i ", key[i], [value[i] intValue]];
+                }
+            } else {
+                whereSql = [NSString stringWithFormat:@"WHERE %@ = '%@' ", key[i], value[i]];
+            }
+        } else {
+            if ([type hasSuffix:@"NSCFNumber"]||[type hasSuffix:@"NSCFBoolean"]) {
+                if ([type hasSuffix:@"NSCFNumber"]) {
+                    NSNumber *number = value[i];
+                    if( CFNumberIsFloatType((CFNumberRef) number)) {
+                        whereSql = [NSString stringWithFormat:@"%@ AND  %@ = %@  ", whereSql, key[i], value[i]];
+                    } else {
+                        whereSql = [NSString stringWithFormat:@"%@ AND  %@ = %i  ", whereSql, key[i], [value[i] intValue]];
+                    }
+                } else {
+                    whereSql = [NSString stringWithFormat:@"%@ AND  %@ = %i  ", whereSql, key[i], [value[i] intValue]];
+                }
+            } else {
+                whereSql = [NSString stringWithFormat:@"%@ AND  %@ = '%@'  ", whereSql, key[i], value[i]];
+            }
+        }
+    }
+    return whereSql;
 }
 
-}else{
-whereSql = [NSString stringWithFormat:@"%@ AND  %@ = %i  ", whereSql, key[i], [value[i] intValue]];
-}
-}else{
-whereSql = [NSString stringWithFormat:@"%@ AND  %@ = '%@'  ", whereSql, key[i], value[i]];
-}
-
-}
-}
-return
-whereSql;
-}
-
-typedef NS_OPTIONS (NSUInteger, ORMDBDataType
-){
-ORMDBDataTypeUnknown,
-ORMDBDataTypeBool,
-ORMDBDataTypeInt,
-ORMDBDataTypeFloat,
-ORMDBDataTypeDouble,
-ORMDBDataTypeClass,
-ORMDBDataTypeString,
-ORMDBDataTypeNumber,
-ORMDBDataTypeArray,
-ORMDBDataTypeMutableArray,
-ORMDBDataTypeDictionary,
-ORMDBDataTypeMutableDictionary,
-ORMDBDataTypeNSDate
-
+typedef NS_OPTIONS (NSUInteger, ORMDBDataType) {
+    ORMDBDataTypeUnknown,
+    ORMDBDataTypeBool,
+    ORMDBDataTypeInt,
+    ORMDBDataTypeFloat,
+    ORMDBDataTypeDouble,
+    ORMDBDataTypeClass,
+    ORMDBDataTypeString,
+    ORMDBDataTypeNumber,
+    ORMDBDataTypeArray,
+    ORMDBDataTypeMutableArray,
+    ORMDBDataTypeDictionary,
+    ORMDBDataTypeMutableDictionary,
+    ORMDBDataTypeNSDate
 };
 
 @protocol ORM <NSObject>
@@ -164,10 +130,7 @@ ORMDBDataTypeNSDate
 /**
  创建表时忽略字段
  **/
-+ (NSArray
-
-<NSString *> *_Nonnull)
-sqlIgnoreColumn;
++ (NSArray <NSString *> *_Nonnull)sqlIgnoreColumn;
 
 /**
  主键
@@ -207,18 +170,17 @@ sqlIgnoreColumn;
 @end
 
 
+
 @interface ORMDBClassPropertyInfo : NSObject
-@property(nonatomic, assign, readonly) objc_property_t _Nullable
-property;
-@property(nonatomic, strong, readonly) NSString *_Nullable
-name;
-@property(nonatomic, strong, readonly) NSString *_Nullable
-typeEncoding;
+
+@property(nonatomic, assign, readonly) objc_property_t _Nullable property;
+@property(nonatomic, strong, readonly) NSString *_Nullable name;
+@property(nonatomic, strong, readonly) NSString *_Nullable typeEncoding;
 @property(nonatomic, assign, readonly) ORMDBDataType type;
 @property(nullable, nonatomic, assign, readonly) Class cls;
 @property(nullable, nonatomic, strong, readonly) NSString *protocol;
-@property(nonatomic, strong) NSString *_Nullable
-foreignTableName;
+@property(nonatomic, strong) NSString *_Nullable foreignTableName;
+
 @end
 
 
@@ -226,49 +188,23 @@ foreignTableName;
 
 + (instancetype _Nullable )metaWithClass:(Class _Nullable )cls;
 
-@property(nonatomic, assign, readonly) Class _Nullable
-cls;
-@property(nonatomic, strong, readonly) NSString *_Nullable
-name;
+@property(nonatomic, assign, readonly) Class _Nullable cls;
+@property(nonatomic, strong, readonly) NSString *_Nullable name;
 @property(nullable, nonatomic, strong, readonly) NSMutableArray *propertyInfos;
 
 @end
 
-static force_inline NSString *_Nullable
-SelectColumn(Class
-_Nullable cls
-){
-ORMDBClassInfo *obj = [ORMDBClassInfo metaWithClass:cls];
-NSMutableString *column = [[NSMutableString alloc] init];
-for (
-ORMDBClassPropertyInfo *info
-in obj
-.propertyInfos) {
-
-if (info.type!=
-ORMDBDataTypeClass &&
-        info
-.type!=
-ORMDBDataTypeArray &&
-        info
-.type!=
-ORMDBDataTypeMutableArray &&
-        info
-.type!=ORMDBDataTypeUnknown){
-[
-column appendFormat
-:@"%@,",info.name];
-}
-}
-if (column.length-1>0) {
-[
-column deleteCharactersInRange
-:NSMakeRange([
-column length
-]-1, 1)];
-
-}
-return
-column;
-
+static force_inline NSString *_Nullable SelectColumn(Class _Nullable cls) {
+    ORMDBClassInfo *obj = [ORMDBClassInfo metaWithClass:cls];
+    NSMutableString *column = [[NSMutableString alloc] init];
+    for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+        if (info.type != ORMDBDataTypeClass && info.type != ORMDBDataTypeArray && info.type != ORMDBDataTypeMutableArray && info.type != ORMDBDataTypeUnknown) {
+            [column appendFormat:@"%@,",info.name];
+        }
+    }
+    if (column.length-1>0) {
+        [column deleteCharactersInRange:NSMakeRange([column length]-1, 1)];
+    }
+    
+    return column;
 }

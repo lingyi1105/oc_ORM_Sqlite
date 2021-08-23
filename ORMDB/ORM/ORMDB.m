@@ -33,7 +33,7 @@ static dispatch_once_t onceToken;
 + (void)beginTransaction {
 
     ORMDB *currentSyncQueue = (__bridge id) dispatch_get_specific(kDispatchQueueSpecificKey);
-    assert(currentSyncQueue != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
+    assert(currentSyncQueue.class != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
 
     if (sqlite3_open([DBPath UTF8String], &database) == SQLITE_OK) {
         char *zErrorMsg = nil;
@@ -41,14 +41,12 @@ static dispatch_once_t onceToken;
             NSLog(@"begin transaction ;");
         }
         sqlite3_exec(database, "begin transaction ;", 0, 0, &zErrorMsg);
-
-
     }
 }
 
 + (void)commitTransaction {
     ORMDB *currentSyncQueue = (__bridge id) dispatch_get_specific(kDispatchQueueSpecificKey);
-    assert(currentSyncQueue != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
+    assert(currentSyncQueue.class != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
 
     char *zErrorMsg = nil;
     if (showsql) {
@@ -56,12 +54,11 @@ static dispatch_once_t onceToken;
     }
     sqlite3_exec(database, "commit transaction ;", 0, 0, &zErrorMsg);
     sqlite3_close(database);
-
 }
 
 + (void)execsql:(NSString *)sql {
     ORMDB *currentSyncQueue = (__bridge id) dispatch_get_specific(kDispatchQueueSpecificKey);
-    assert(currentSyncQueue != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
+    assert(currentSyncQueue.class != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
 
     if (showsql) {
         NSLog(@"%@", sql);
@@ -76,19 +73,16 @@ static dispatch_once_t onceToken;
         NSLog(@"数据库 访问错误...error code:%i %@", result, sql);
     }
     sqlite3_finalize(statement);
-
 }
 
 /**快速查询判断是否存在结果**/
 + (BOOL)rowExist:(NSString *)sql {
-
     BOOL result = FALSE;
     if (showsql) {
         NSLog(@"%@", sql);
     }
     sqlite3_stmt *statement;
     if ((sqlite3_prepare_v2(database, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
-
         if (sqlite3_step(statement) == SQLITE_ROW) {
             result = TRUE;
         }
@@ -105,7 +99,6 @@ static dispatch_once_t onceToken;
     sqlite3_stmt *statement;
     sqlite3 *queryDB;
     if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
-
         if (sqlite3_step(statement) == SQLITE_ROW) {
             result = TRUE;
         }
@@ -124,7 +117,6 @@ static dispatch_once_t onceToken;
     sqlite3_stmt *statement;
     sqlite3 *queryDB;
     if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
-
         while (sqlite3_step(statement) == SQLITE_ROW) {
             char *nameData = (char *) sqlite3_column_text(statement, 1);
             NSString *columnName = [NSString stringWithUTF8String:nameData];
@@ -134,7 +126,6 @@ static dispatch_once_t onceToken;
                 break;
             }
         }
-
         sqlite3_finalize(statement);
     }
     return result;
@@ -149,14 +140,12 @@ static dispatch_once_t onceToken;
     sqlite3_stmt *statement;
     sqlite3 *queryDB;
     if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
-
         while (sqlite3_step(statement) == SQLITE_ROW) {
             char *nameData = (char *) sqlite3_column_text(statement, 1);
             NSString *columnName = [NSString stringWithUTF8String:nameData];
             NSLog(@"columnName: %@", columnName);
             [arr addObject:columnName];
         }
-
         sqlite3_finalize(statement);
     }
     return [arr copy];
@@ -167,16 +156,12 @@ static dispatch_once_t onceToken;
     sqlite3 *queryDB;
     sqlite3_stmt *statement;
     if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
-
         int columnCount = sqlite3_column_count(statement);
         if (sqlite3_step(statement) == SQLITE_ROW) {
             for (int i = 0; i < columnCount; i++) {
                 id returnValue = nil;
-
                 NSString *columnName = [NSString stringWithUTF8String:sqlite3_column_name(statement, i)];
                 int columnType = sqlite3_column_type(statement, i);
-
-
                 if (columnType == SQLITE_INTEGER) {
                     returnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, i)];
                 } else if (columnType == SQLITE_FLOAT) {
@@ -192,7 +177,6 @@ static dispatch_once_t onceToken;
                 if (returnValue) {
                     [returnDic setObject:returnValue forKey:columnName];
                 }
-
             }
         }
         sqlite3_finalize(statement);
@@ -207,9 +191,7 @@ static dispatch_once_t onceToken;
     sqlite3 *queryDB;
     sqlite3_stmt *statement = nil;
     ORMDBClassInfo *obj = [ORMDBClassInfo metaWithClass:cls];
-    if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK &&
-            (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) ==
-                    SQLITE_OK)) {
+    if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
         if (showsql) {
             NSLog(@"%@", sql);
         }
@@ -224,10 +206,7 @@ static dispatch_once_t onceToken;
         while (sqlite3_step(statement) == SQLITE_ROW) {
             NSObject *object = [[cls alloc] init];
             for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
-                if (info.type != ORMDBDataTypeClass &&
-                        info.type != ORMDBDataTypeArray &&
-                        info.type != ORMDBDataTypeMutableArray &&
-                        info.type != ORMDBDataTypeUnknown) {
+                if (info.type != ORMDBDataTypeClass && info.type != ORMDBDataTypeArray && info.type != ORMDBDataTypeMutableArray && info.type != ORMDBDataTypeUnknown) {
                     NSNumber *num = [tmpColumn valueForKey:info.name];
                     if (!num) {
                         continue;
@@ -239,50 +218,39 @@ static dispatch_once_t onceToken;
                         c = "";
                     }
 
-                    NSString *value = [[NSString alloc] initWithCString:c
-                                                               encoding:NSUTF8StringEncoding];
-                    NSString *ucfirstName = [info.name stringByReplacingCharactersInRange:NSMakeRange(0, 1)
-                                                                               withString:[[info.name substringToIndex:1]
-                                                                                       uppercaseString]];
+                    NSString *value = [[NSString alloc] initWithCString:c encoding:NSUTF8StringEncoding];
+                    NSString *ucfirstName = [info.name stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[[info.name substringToIndex:1] uppercaseString]];
                     NSString *selectorName = [NSString stringWithFormat:@"set%@:", ucfirstName];
 
                     SEL setterMethod = NSSelectorFromString(selectorName);
 
                     switch (info.type) {
                         case ORMDBDataTypeString: {
-                            ((void (*)(id, SEL, id)) (void *) objc_msgSend)((id) object,
-                                    setterMethod, value);
+                            ((void (*)(id, SEL, id)) (void *) objc_msgSend)((id) object, setterMethod, value);
                         }
                             break;
                         case ORMDBDataTypeInt: {
-                            ((void (*)(id, SEL, long long)) (void *) objc_msgSend)(
-                                    (id) object, setterMethod, [value longLongValue]);
+                            ((void (*)(id, SEL, long long)) (void *) objc_msgSend)((id) object, setterMethod, [value longLongValue]);
                         }
                             break;
                         case ORMDBDataTypeBool: {
-                            ((void (*)(id, SEL, int)) (void *) objc_msgSend)(
-                                    (id) object, setterMethod, [value boolValue]);
+                            ((void (*)(id, SEL, int)) (void *) objc_msgSend)((id) object, setterMethod, [value boolValue]);
                         }
                             break;
                         case ORMDBDataTypeFloat: {
-                            ((void (*)(id, SEL, float)) (void *) objc_msgSend)(
-                                    (id) object, setterMethod, [value floatValue]);
+                            ((void (*)(id, SEL, float)) (void *) objc_msgSend)((id) object, setterMethod, [value floatValue]);
                         }
                             break;
                         case ORMDBDataTypeNSDate: {
-                            ((void (*)(id, SEL, NSDate *)) (void *) objc_msgSend)(
-                                    (id) object, setterMethod,
-                                    [NSDate dateWithTimeIntervalSince1970:[value doubleValue]]);
+                            ((void (*)(id, SEL, NSDate *)) (void *) objc_msgSend)((id) object, setterMethod, [NSDate dateWithTimeIntervalSince1970:[value doubleValue]]);
                         }
                             break;
                         case ORMDBDataTypeDouble: {
-                            ((void (*)(id, SEL, double)) (void *) objc_msgSend)(
-                                    (id) object, setterMethod, [value doubleValue]);
+                            ((void (*)(id, SEL, double)) (void *) objc_msgSend)((id) object, setterMethod, [value doubleValue]);
                         }
                             break;
                         case ORMDBDataTypeNumber: {
-                            ((void (*)(id, SEL, NSNumber *)) (void *) objc_msgSend)((id) object, setterMethod,
-                                    (NSNumber *) ORMDBNumberCreateFromID(value));
+                            ((void (*)(id, SEL, NSNumber *)) (void *) objc_msgSend)((id) object, setterMethod, (NSNumber *) ORMDBNumberCreateFromID(value));
                         }
                             break;
                         case ORMDBDataTypeDictionary:
@@ -290,21 +258,16 @@ static dispatch_once_t onceToken;
                             NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding];
                             NSDictionary *json =
                             (NSDictionary * )
-                            [NSJSONSerialization JSONObjectWithData:data
-                                                            options:0
-                                                              error:nil];
+                            [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                             if (info.type == ORMDBDataTypeMutableDictionary) {
-                                ((void (*)(id, SEL, NSMutableDictionary *)) (void *) objc_msgSend)(
-                                        (id) object, setterMethod, json.mutableCopy);
+                                ((void (*)(id, SEL, NSMutableDictionary *)) (void *) objc_msgSend)((id) object, setterMethod, json.mutableCopy);
                             } else {
-                                ((void (*)(id, SEL, NSDictionary *)) (void *) objc_msgSend)(
-                                        (id) object, setterMethod, json);
+                                ((void (*)(id, SEL, NSDictionary *)) (void *) objc_msgSend)((id) object, setterMethod, json);
                             }
                         }
                             break;
                         default: {
-                            ((void (*)(id, SEL, id)) (void *) objc_msgSend)((id) object,
-                                    setterMethod, value);
+                            ((void (*)(id, SEL, id)) (void *) objc_msgSend)((id) object, setterMethod, value);
                         }
                             break;
                     }
@@ -315,8 +278,7 @@ static dispatch_once_t onceToken;
                     if (info.protocol) {
                         fcls = NSClassFromString(info.protocol);
                     }
-                    NSMethodSignature *foreignSignature =
-                            [fcls methodSignatureForSelector:foreignSelector];
+                    NSMethodSignature *foreignSignature = [fcls methodSignatureForSelector:foreignSelector];
                     if (foreignSignature) {
                         id foreignObjectValue = ((id(*)(id, SEL)) (void *) objc_msgSend)((id) [fcls class], foreignSelector);
                         SEL primarySelector = NSSelectorFromString(@"primarilyKey");
@@ -329,18 +291,15 @@ static dispatch_once_t onceToken;
                             continue;
                         }
 
-                        Class tmpcls =
-                                info.protocol ? NSClassFromString(info.protocol) : info.cls;
-                        NSString *sql = [NSString
-                                stringWithFormat:@"SELECT %@ FROM %@ %@", SelectColumn(tmpcls),
-                                                 info.protocol ? info.protocol : info.cls,
-                                                 createWhereStatement(@[foreignObjectValue],
-                                                         @[primaryKeyValue])];
+                        Class tmpcls = info.protocol ? NSClassFromString(info.protocol) : info.cls;
+                        NSString *sql = nil;
+                        if (info.protocol) {
+                            sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@", SelectColumn(tmpcls), info.protocol, createWhereStatement(@[foreignObjectValue], @[primaryKeyValue])];
+                        } else {
+                            sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@", SelectColumn(tmpcls), info.cls, createWhereStatement(@[foreignObjectValue], @[primaryKeyValue])];
+                        }
 
-                        NSMutableArray *a =
-                                [ORMDB queryDB:info.protocol ? NSClassFromString(info.protocol)
-                                                : info.cls
-                                        andSql:sql];
+                        NSMutableArray *a = [ORMDB queryDB:info.protocol?NSClassFromString(info.protocol):info.cls andSql:sql];
                         id obj = a;
                         if (info.type == ORMDBDataTypeUnknown && info.cls) {
                             if (a.count > 0) {
@@ -367,7 +326,7 @@ static dispatch_once_t onceToken;
 + (void)saveObject:(id)entity withSql:(NSString *)sql {
 
     ORMDB *currentSyncQueue = (__bridge id) dispatch_get_specific(kDispatchQueueSpecificKey);
-    assert(currentSyncQueue != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
+    assert(currentSyncQueue.class != self && "inDatabase: was called reentrantly on the same queue, which would lead to a deadlock");
 
     if (showsql) {
         NSLog(@"%@", sql);
@@ -381,10 +340,7 @@ static dispatch_once_t onceToken;
     if (sqlite3_prepare_v2(database, [sql UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
 
-            if (info.type != ORMDBDataTypeClass &&
-                    info.type != ORMDBDataTypeArray &&
-                    info.type != ORMDBDataTypeMutableArray &&
-                    info.type != ORMDBDataTypeUnknown) {
+            if (info.type != ORMDBDataTypeClass && info.type != ORMDBDataTypeArray && info.type != ORMDBDataTypeMutableArray && info.type != ORMDBDataTypeUnknown) {
 
                 id objvalue = [entity valueForKey:info.name];
 
