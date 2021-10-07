@@ -7,7 +7,7 @@
 //
 
 #import "NewOjbSubInfo.h"
-#import "NSObject+ORM.h"
+#import "ORM.h"
 
 @implementation NewOjbSubInfo
 

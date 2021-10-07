@@ -10,6 +10,9 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+#import "ORMDB.h"
+#import "NSObject+ORM.h"
+
 #define force_inline __inline__ __attribute__((always_inline))
 
 

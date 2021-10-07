@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ORM.h"
-#import "ORMDB.h"
 
 @interface SqlOperationQueueObject : NSObject
 /**
@@ -82,16 +80,22 @@
 + (BOOL)rowExist:(NSString *)requirement;
 
 /**
- 自定义sql requirement查询，并返回封装对象的结果 集合
+ 自定义sql requirement查询，并返回封装对象的结果 数组
  例：[CLS queryForObjectArrayWhere:@"gender = 'man' and age = '20'"]
  **/
 + (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement;
 
 /**
- 自定义sql requirement查询 description排序，并返回封装对象的结果 集合
+ 自定义sql requirement查询 description排序，并返回封装对象的结果 数组
  例：[CLS queryForObjectArrayWhere:@"gender = 'man' and age = '20'" orderBy:@"id desc, birthday asc"]
  **/
 + (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement orderBy:(NSString *)description;
+
+/**
+ 自定义sql requirement查询 description排序 limit限制查询结果返回的数量，并返回封装对象的结果 数组
+ 例：[CLS queryForObjectArrayWhere:@"gender = 'man' and age = '20'" orderBy:@"id desc, birthday asc" limit:@"0,30"]
+ **/
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement orderBy:(NSString *)description limit:(NSString *)limit;
 
 /**
     只返回 一行查询结果，通过字段名字取值
@@ -103,9 +107,10 @@
 + (NSMutableDictionary *)queryForDictionaryWhere:(NSString *)requirement;
 
 /**
- 自定义sql查询，并返回封装对象的结果 集合
+ 自定义sql查询，并返回封装对象的结果 数组
  **/
-+ (NSMutableArray *)queryForObjectArray:(NSString *)sql DEPRECATED_MSG_ATTRIBUTE("use queryForObjectArrayWhere instead");
++ (NSMutableArray *)queryForObjectArray:(NSString *)sql DEPRECATED_MSG_ATTRIBUTE("use queryForObjectArrayByRawSQL instead");
++ (NSMutableArray *)queryForObjectArrayWithRawSQL:(NSString *)sql;
 
 /**
 	只返回 一行查询结果，通过字段名字取值
@@ -114,7 +119,8 @@
  
 	result[@"columnName"];
  */
-+ (NSMutableDictionary *)queryForDictionary:(NSString *)sql DEPRECATED_MSG_ATTRIBUTE("use queryForDictionaryWhere instead");
++ (NSMutableDictionary *)queryForDictionary:(NSString *)sql DEPRECATED_MSG_ATTRIBUTE("use queryForDictionaryWithRawSQL instead");
++ (NSMutableDictionary *)queryForDictionaryWithRawSQL:(NSString *)sql;
 
 /**
  执行自定义 sql  update/insert

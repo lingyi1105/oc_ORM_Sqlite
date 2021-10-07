@@ -13,9 +13,7 @@
     return @"one";
 }
 
-+ (NSDictionary
-
-<NSString *, NSString *> *_Nonnull)foreignKeyNotCreateTable{
++ (NSDictionary<NSString *, NSString *> *_Nonnull)foreignKeyNotCreateTable{
     return @{@"test": @"Student"};
 }
 @end

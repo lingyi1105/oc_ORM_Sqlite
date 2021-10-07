@@ -7,7 +7,7 @@
 //
 
 #import "ClassInfo.h"
-#import "NSObject+ORM.h"
+#import "ORM.h"
 
 @implementation ClassInfo
 
@@ -18,9 +18,7 @@
     });
 }
 
-+ (NSArray
-
-<NSString *> *_Nonnull)sqlIgnoreColumn {
++ (NSArray<NSString *> *_Nonnull)sqlIgnoreColumn {
     return @[NSStringFromSelector(@selector(id)), NSStringFromSelector(@selector(cid))];
 }
 

@@ -208,7 +208,7 @@ int main(int argc, const char *argv[]) {
     dispatch_group_t dispatchGroup = dispatch_group_create();
 
     //成员变量自动创建table
-//    testClossInof();
+    testClossInof();
 
 
 #if 0 //创建

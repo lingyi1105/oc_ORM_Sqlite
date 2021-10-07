@@ -7,6 +7,8 @@
 //
 
 #import "NSObject+ORM.h"
+#import "ORM.h"
+#import "ORMDB.h"
 
 @implementation NSObject (Extensions)
 static dispatch_queue_t _queue;
@@ -81,12 +83,28 @@ static dispatch_once_t onceToken;
 }
 
 + (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement {
+    if (requirement == nil || requirement.length == 0) {
+        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", [self class]];
+        return [ORMDB queryDB:[self class] andSql:sql];
+    }
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", [self class], requirement];
     return [ORMDB queryDB:[self class] andSql:sql];
 }
 
 + (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement orderBy:(NSString *)description {
+    if (requirement == nil || requirement.length == 0) {
+        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY %@", [self class], description];
+        return [ORMDB queryDB:[self class] andSql:sql];
+    }
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ ORDER BY %@", [self class], requirement, description];
+    return [ORMDB queryDB:[self class] andSql:sql];
+}
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement orderBy:(NSString *)description limit:(NSString *)limit {
+    if (requirement == nil || requirement.length == 0) {
+        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY %@ LIMIT %@", [self class], description, limit];
+        return [ORMDB queryDB:[self class] andSql:sql];
+    }
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ ORDER BY %@ LIMIT %@", [self class], requirement, description, limit];
     return [ORMDB queryDB:[self class] andSql:sql];
 }
 
@@ -99,9 +117,18 @@ static dispatch_once_t onceToken;
     return [ORMDB queryDB:[self class] andSql:sql];
 }
 
++ (NSMutableArray *)queryForObjectArrayWithRawSQL:(NSString *)sql {
+    return [ORMDB queryDB:[self class] andSql:sql];
+}
+
 + (NSMutableDictionary *)queryForDictionary:(NSString *)sql {
     return [ORMDB queryWithSql:sql];
 }
+
++ (NSMutableDictionary *)queryForDictionaryWithRawSQL:(NSString *)sql {
+    return [ORMDB queryWithSql:sql];
+}
+
 @end
 
 @implementation NSArray (ORM)
