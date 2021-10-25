@@ -339,6 +339,9 @@ static dispatch_once_t onceToken;
     sqlite3_stmt *statement;
     if (sqlite3_prepare_v2(database, [sql UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+            if ([info.name isEqualToString:@"autoIncrementId"]) {
+                continue;
+            }
 
             if (info.type != ORMDBDataTypeClass && info.type != ORMDBDataTypeArray && info.type != ORMDBDataTypeMutableArray && info.type != ORMDBDataTypeUnknown) {
 
@@ -409,5 +412,50 @@ static dispatch_once_t onceToken;
     }
 
 }
+
++ (NSInteger)countDBWithSql:(NSString *)sql {
+    sqlite3 *queryDB;
+    sqlite3_stmt *statement = nil;
+    if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
+        if (showsql) {
+            NSLog(@"%@", sql);
+        }
+
+        if (sqlite3_step(statement) == SQLITE_ROW) {
+            const char *c = (char *) sqlite3_column_text(statement, 0);
+            if (!c) {
+                c = "";
+            }
+            NSString *value = [[NSString alloc] initWithCString:c encoding:NSUTF8StringEncoding];
+
+            return value.integerValue;
+        }
+    }
+    return 0;
+}
+
++ (NSNumber *)sumDB:(Class)cls andKey:(NSString *)key andSql:(NSString *)sql {
+    sqlite3 *queryDB;
+    sqlite3_stmt *statement = nil;
+    if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
+        if (showsql) {
+            NSLog(@"%@", sql);
+        }
+
+        if (sqlite3_step(statement) == SQLITE_ROW) {
+            const char *c = (char *) sqlite3_column_text(statement, 0);
+            if (!c) {
+                c = "";
+            }
+            NSString *value = [[NSString alloc] initWithCString:c encoding:NSUTF8StringEncoding];
+            NSNumberFormatter *numFormatter = [[NSNumberFormatter alloc] init];
+            NSNumber *num = [numFormatter numberFromString:value];
+            return num;
+        }
+    }
+    
+    return nil;
+}
+
 
 @end

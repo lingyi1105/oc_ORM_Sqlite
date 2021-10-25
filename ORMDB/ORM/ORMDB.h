@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-
+#ifdef DEBUG
 #define showsql true
+#else
+#define showsql false
+#endif
 
 @interface ORMDB : NSObject
 
@@ -49,4 +52,9 @@
 + (BOOL)columnExist:(NSString *)column table:(NSString *)table;
 
 + (NSArray *)columns:(NSString *)table;
+
++ (NSInteger)countDBWithSql:(NSString *)sql;
+
++ (NSNumber *)sumDB:(Class)cls andKey:(NSString *)key andSql:(NSString *)sql;
+
 @end

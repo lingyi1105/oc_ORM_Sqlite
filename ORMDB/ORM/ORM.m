@@ -243,6 +243,9 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
 
     NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ ( autoIncrementId INTEGER PRIMARY KEY AUTOINCREMENT ,", cls];
     for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+        if ([info.name isEqualToString:@"autoIncrementId"]) {
+            continue;
+        }
 
         switch (info.type) {
             case ORMDBDataTypeNumber:
@@ -276,6 +279,9 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
     sql = [NSString stringWithFormat:@"%@ %@", sql, @" );"];
 
     for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+        if ([info.name isEqualToString:@"autoIncrementId"]) {
+            continue;
+        }
         if (info.foreignTableName) {
             continue;
         }
@@ -292,6 +298,9 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
 
     NSArray * columns = [ORMDB columns:NSStringFromClass(cls)];
     for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+        if ([info.name isEqualToString:@"autoIncrementId"]) {
+            continue;
+        }
         if (info.foreignTableName) {
             continue;
         }
@@ -387,6 +396,9 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
     NSMutableString *sql = [[NSMutableString alloc] initWithFormat:@"INSERT INTO  %@   (", [entity class]];
     NSMutableString *valueSql = [[NSMutableString alloc] initWithString:@" VALUES ( "];
     for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+        if ([info.name isEqualToString:@"autoIncrementId"]) {
+            continue;
+        }
         if (info.type != ORMDBDataTypeClass && info.type != ORMDBDataTypeArray && info.type != ORMDBDataTypeMutableArray && info.type != ORMDBDataTypeUnknown) {
             [sql appendFormat:@"%@ ,", info.name];
             [valueSql appendFormat:@"?,"];
@@ -407,6 +419,9 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
     [ORMDB saveObject:entity withSql:sql];
 
     for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+        if ([info.name isEqualToString:@"autoIncrementId"]) {
+            continue;
+        }
 
         if (info.type == ORMDBDataTypeClass ||
                 info.type == ORMDBDataTypeArray ||
@@ -578,7 +593,7 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
     }
 
 
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM  %@ %@", SelectColumn(cls), cls, createWhereStatement(keys, values)];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@", SelectColumn(cls), cls, createWhereStatement(keys, values)];
 
     NSMutableArray *arr = [ORMDB queryDB:cls andSql:sql];
     if (arr.count > 0) {
@@ -589,7 +604,7 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
 }
 
 + (void)deleteObject:(Class)cls withKeys:(NSArray *)keys andValues:(NSArray *)values {
-    NSString *sql = [NSString stringWithFormat:@"DELETE FROM  %@ %@", cls, createWhereStatement(keys, values)];
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM %@ %@", cls, createWhereStatement(keys, values)];
     [ORMDB beginTransaction];
     [ORMDB execsql:sql];
     [ORMDB commitTransaction];
@@ -601,7 +616,7 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
             return nil;
         }
     }
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM  %@ %@", SelectColumn(cls), cls, createWhereStatement(keys, values)];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM %@ %@", SelectColumn(cls), cls, createWhereStatement(keys, values)];
     NSMutableArray *arr = [ORMDB queryDB:cls andSql:sql];
     return arr;
 }
@@ -632,13 +647,13 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
             }
         } else {
             if ([type hasSuffix:@"NSCFNumber"] || [type hasSuffix:@"NSCFBoolean"] || [type compare:@"(null)"] == NSOrderedSame) {
-                whereSql = [NSString stringWithFormat:@"%@ AND  %@ = %lld  ", whereSql, keys[i], [[entity valueForKey:keys[i]] longLongValue]];
+                whereSql = [NSString stringWithFormat:@"%@ AND %@ = %lld ", whereSql, keys[i], [[entity valueForKey:keys[i]] longLongValue]];
             } else {
-                whereSql = [NSString stringWithFormat:@"%@ AND  %@ = '%@'  ", whereSql, keys[i], [entity valueForKey:keys[i]]];
+                whereSql = [NSString stringWithFormat:@"%@ AND %@ = '%@' ", whereSql, keys[i], [entity valueForKey:keys[i]]];
             }
         }
     }
-    whereSql = [NSString stringWithFormat:@"%@ ;", whereSql];
+    whereSql = [NSString stringWithFormat:@"%@;", whereSql];
     return whereSql;
 
 }

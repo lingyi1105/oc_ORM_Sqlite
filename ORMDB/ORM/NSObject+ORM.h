@@ -123,6 +123,18 @@
 + (NSMutableDictionary *)queryForDictionaryWithRawSQL:(NSString *)sql;
 
 /**
+	返回 数量count
+	NSUInteger count = [ELBNFSMealHistoryModel count:@"*" where:@"day = 22"];
+ */
++ (NSUInteger)count:(NSString *)key where:(NSString *)requirement;
+
+/**
+	返回 单个字段sum值
+	NSNumber *sum = [ELBNFSMealHistoryModel sum:@"mealType" where:@"day = 22"];
+ */
++ (NSNumber *)sum:(NSString *)key where:(NSString *)requirement;
+
+/**
  执行自定义 sql  update/insert
  **/
 

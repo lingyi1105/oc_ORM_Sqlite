@@ -78,7 +78,7 @@ static dispatch_once_t onceToken;
 }
 
 + (BOOL)rowExist:(NSString *)requirement {//SELECT * FROM NewOjb WHERE num = 100  ;
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", [self class], requirement];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ LIMIT 1", [self class], requirement];
     return [ORMDB rowExistPro:sql];
 }
 
@@ -127,6 +127,27 @@ static dispatch_once_t onceToken;
 
 + (NSMutableDictionary *)queryForDictionaryWithRawSQL:(NSString *)sql {
     return [ORMDB queryWithSql:sql];
+}
+
++ (NSUInteger)count:(NSString *)key where:(NSString *)requirement {
+    if (key == nil || requirement.length == 0) {
+        key = @"autoIncrementId";
+    }
+    if (requirement == nil || requirement.length == 0) {
+        NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(%@) FROM %@", key, [self class]];
+        return [ORMDB countDBWithSql:sql];
+    }
+    NSString *sql = [NSString stringWithFormat:@"SELECT COUNT(%@) FROM %@ WHERE %@", key, [self class], requirement];
+    return [ORMDB countDBWithSql:sql];
+}
+
++ (NSNumber *)sum:(NSString *)key where:(NSString *)requirement {
+    if (requirement == nil || requirement.length == 0) {
+        NSString *sql = [NSString stringWithFormat:@"SELECT SUM(%@) FROM %@", key, [self class]];
+        return [ORMDB sumDB:[self class] andKey:key andSql:sql];
+    }
+    NSString *sql = [NSString stringWithFormat:@"SELECT SUM(%@) FROM %@ WHERE %@", key, [self class], requirement];
+    return [ORMDB sumDB:[self class] andKey:key andSql:sql];
 }
 
 @end
