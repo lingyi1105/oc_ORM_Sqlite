@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		783BD52026CF4C8D003CB7C9 /* NewOjbSubInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 783BD51F26CF4C8D003CB7C9 /* NewOjbSubInfo.m */; };
+		78BC69E32726FDC600201312 /* MealHistoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BC69DF2726FDC600201312 /* MealHistoryModel.m */; };
+		78BC69E42726FDC600201312 /* FoodNutritionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BC69E12726FDC600201312 /* FoodNutritionModel.m */; };
 		993600AB1EF0D935005F7450 /* ORMDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 993600A51EF0D935005F7450 /* ORMDB.m */; };
 		993600AC1EF0D935005F7450 /* ORM.m in Sources */ = {isa = PBXBuildFile; fileRef = 993600A71EF0D935005F7450 /* ORM.m */; };
 		993600AD1EF0D935005F7450 /* NSObject+ORM.m in Sources */ = {isa = PBXBuildFile; fileRef = 993600A91EF0D935005F7450 /* NSObject+ORM.m */; };
@@ -36,6 +38,10 @@
 /* Begin PBXFileReference section */
 		783BD51E26CF4C8D003CB7C9 /* NewOjbSubInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewOjbSubInfo.h; sourceTree = "<group>"; };
 		783BD51F26CF4C8D003CB7C9 /* NewOjbSubInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewOjbSubInfo.m; sourceTree = "<group>"; };
+		78BC69DF2726FDC600201312 /* MealHistoryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MealHistoryModel.m; sourceTree = "<group>"; };
+		78BC69E02726FDC600201312 /* FoodNutritionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoodNutritionModel.h; sourceTree = "<group>"; };
+		78BC69E12726FDC600201312 /* FoodNutritionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoodNutritionModel.m; sourceTree = "<group>"; };
+		78BC69E22726FDC600201312 /* MealHistoryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MealHistoryModel.h; sourceTree = "<group>"; };
 		993600A51EF0D935005F7450 /* ORMDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORMDB.m; sourceTree = "<group>"; };
 		993600A61EF0D935005F7450 /* ORMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORMDB.h; sourceTree = "<group>"; };
 		993600A71EF0D935005F7450 /* ORM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORM.m; sourceTree = "<group>"; };
@@ -107,6 +113,10 @@
 				99B7C8511EEA3BCA00C3CED8 /* NewOjb.m */,
 				783BD51E26CF4C8D003CB7C9 /* NewOjbSubInfo.h */,
 				783BD51F26CF4C8D003CB7C9 /* NewOjbSubInfo.m */,
+				78BC69E02726FDC600201312 /* FoodNutritionModel.h */,
+				78BC69E12726FDC600201312 /* FoodNutritionModel.m */,
+				78BC69E22726FDC600201312 /* MealHistoryModel.h */,
+				78BC69DF2726FDC600201312 /* MealHistoryModel.m */,
 			);
 			path = ORMDB;
 			sourceTree = "<group>";
@@ -192,6 +202,8 @@
 				99B8DEDB1DE5B0160041AF8C /* main.m in Sources */,
 				993600AB1EF0D935005F7450 /* ORMDB.m in Sources */,
 				99CF632F1EE142030034B457 /* Student.m in Sources */,
+				78BC69E32726FDC600201312 /* MealHistoryModel.m in Sources */,
+				78BC69E42726FDC600201312 /* FoodNutritionModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
