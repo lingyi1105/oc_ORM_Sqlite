@@ -86,6 +86,12 @@
 + (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement;
 
 /**
+ 自定义sql requirement查询 limit限制查询结果返回的数量，并返回封装对象的结果 数组
+ 例：[CLS queryForObjectArrayWhere:@"gender = 'man' and age = '20'" limit:@"0,30"]
+ **/
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement limit:(NSString *)limit;
+
+/**
  自定义sql requirement查询 description排序，并返回封装对象的结果 数组
  例：[CLS queryForObjectArrayWhere:@"gender = 'man' and age = '20'" orderBy:@"id desc, birthday asc"]
  **/

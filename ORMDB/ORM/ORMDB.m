@@ -339,7 +339,7 @@ static dispatch_once_t onceToken;
     sqlite3_stmt *statement;
     if (sqlite3_prepare_v2(database, [sql UTF8String], -1, &statement, NULL) == SQLITE_OK) {
         for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
-            if ([info.name isEqualToString:@"autoIncrementId"]) {
+            if ([info.name isEqualToString:@"autoIncrementId"] && ![entity valueForKey:info.name]) {
                 continue;
             }
 
@@ -416,6 +416,7 @@ static dispatch_once_t onceToken;
 + (NSInteger)countDBWithSql:(NSString *)sql {
     sqlite3 *queryDB;
     sqlite3_stmt *statement = nil;
+    NSInteger result = 0;
     if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
         if (showsql) {
             NSLog(@"%@", sql);
@@ -428,15 +429,18 @@ static dispatch_once_t onceToken;
             }
             NSString *value = [[NSString alloc] initWithCString:c encoding:NSUTF8StringEncoding];
 
-            return value.integerValue;
+            result = value.integerValue;
         }
+        sqlite3_finalize(statement);
+        sqlite3_close(queryDB);
     }
-    return 0;
+    return result;
 }
 
 + (NSNumber *)sumDB:(Class)cls andKey:(NSString *)key andSql:(NSString *)sql {
     sqlite3 *queryDB;
     sqlite3_stmt *statement = nil;
+    NSNumber *num = nil;
     if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
         if (showsql) {
             NSLog(@"%@", sql);
@@ -449,12 +453,13 @@ static dispatch_once_t onceToken;
             }
             NSString *value = [[NSString alloc] initWithCString:c encoding:NSUTF8StringEncoding];
             NSNumberFormatter *numFormatter = [[NSNumberFormatter alloc] init];
-            NSNumber *num = [numFormatter numberFromString:value];
-            return num;
+            num = [numFormatter numberFromString:value];
         }
+        sqlite3_finalize(statement);
+        sqlite3_close(queryDB);
     }
     
-    return nil;
+    return num;
 }
 
 

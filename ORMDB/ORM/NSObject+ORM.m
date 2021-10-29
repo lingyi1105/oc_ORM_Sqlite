@@ -77,7 +77,7 @@ static dispatch_once_t onceToken;
 
 }
 
-+ (BOOL)rowExist:(NSString *)requirement {//SELECT * FROM NewOjb WHERE num = 100  ;
++ (BOOL)rowExist:(NSString *)requirement {
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ LIMIT 1", [self class], requirement];
     return [ORMDB rowExistPro:sql];
 }
@@ -88,6 +88,15 @@ static dispatch_once_t onceToken;
         return [ORMDB queryDB:[self class] andSql:sql];
     }
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@", [self class], requirement];
+    return [ORMDB queryDB:[self class] andSql:sql];
+}
+
++ (NSMutableArray *)queryForObjectArrayWhere:(NSString *)requirement limit:(NSString *)limit {
+    if (requirement == nil || requirement.length == 0) {
+        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ LIMIT %@", [self class], limit];
+        return [ORMDB queryDB:[self class] andSql:sql];
+    }
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ LIMIT %@", [self class], requirement, limit];
     return [ORMDB queryDB:[self class] andSql:sql];
 }
 

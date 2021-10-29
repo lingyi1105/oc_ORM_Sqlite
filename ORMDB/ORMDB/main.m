@@ -17,6 +17,8 @@
 #import "StudentTest2.h"
 #import "ORMDB.h"
 
+#import "MealHistoryModel.h"
+
 double t(double last, char *key) {
     clock_t now = clock();
     printf("time:%fs \t key:%s \n", (last != 0) ? (double) (now - last) / CLOCKS_PER_SEC : 0, key);
@@ -199,6 +201,38 @@ void testNewOjbDB() {
     NSLog(@"");
 }
 
+void createMealHistoryModelDB (int count) {
+    NSMutableArray *arr = [NSMutableArray array];
+    for (int i=0; i<count; i++) {
+        MealHistoryModel *his = [MealHistoryModel new];
+        his.userId = 9527;
+        
+        his.mealType = @(arc4random() % 4);
+        
+        his.name=[@"food name " stringByAppendingFormat:@"%04x", arc4random() % 19];
+        
+        his.energy = @((arc4random() % 300) + 100);
+        
+        his.carbohydrate = @((arc4random() % 40) + 10);
+        his.fat = @((arc4random() % 20) + 1);
+        his.protein = @((arc4random() % 20) + 1);
+        his.massValueMilligram = ((arc4random() % 300) + 100) * 1000;
+        
+        his.timestamp = [NSDate date].timeIntervalSince1970 * 1000 - (24*60*60*1000)*(i+arc4random() % 2) + (i+arc4random() % (24*60*60*1000));
+        
+//        [his save];
+        
+        [arr addObject:his];
+    }
+    
+    [MealHistoryModel saveList:arr];
+    
+    NSLog(@"sleep 10");
+    sleep(10);
+    NSLog(@"sleep done");
+    
+}
+
 int main(int argc, const char *argv[]) {
 @autoreleasepool {
 
@@ -206,16 +240,49 @@ int main(int argc, const char *argv[]) {
 
     dispatch_queue_t dispatchQueue = dispatch_queue_create("com.queue.test", DISPATCH_QUEUE_CONCURRENT);
     dispatch_group_t dispatchGroup = dispatch_group_create();
-
-    //成员变量自动创建table
-    testClossInof();
-
-
+    
 #if 0 //创建
-    createNewOjbDB();
-#else //查询
-    testNewOjbDB();
+    createMealHistoryModelDB(108);
+#else
+    MealHistoryModel *firstOne = [MealHistoryModel firstOne];
+    NSLog(@"firstOne: %@", firstOne);
+    if (firstOne != nil) {
+        [firstOne remove];
+    }
+    
+    NSArray *queryListAll = [MealHistoryModel queryListAll];
+    NSLog(@"queryListAll.count: %@", @(queryListAll.count));
+    if (queryListAll.count > 0) {
+        MealHistoryModel *his = queryListAll[0];
+        his.mealType = @(100);
+        his.massValueMilligram = 1;
+        [his update];
+    }
+    
+    MealHistoryModel *hisIdOne = [MealHistoryModel getOneByAiid:1];
+    if (hisIdOne != nil) {
+        hisIdOne.mealType = @(99);
+        hisIdOne.massValueMilligram = 999;
+        [hisIdOne update];
+    }
+    
+    NSArray *arr = [MealHistoryModel queryListByDateString:@"2021-10-29" andMmealType:@(3)];
+    NSLog(@"arr.count: %@", @(arr.count));
+    
+    NSNumber *sum = [MealHistoryModel sumWeekly:@"energy" byDate:[NSDate date]];
+    NSLog(@"sum: %@", sum);
+    
 #endif
+
+//    //成员变量自动创建table
+//    testClossInof();
+//
+//
+//#if 0 //创建
+//    createNewOjbDB();
+//#else //查询
+//    testNewOjbDB();
+//#endif
 
 //        [Test createTable];
 //    for(int i=0;i<20;i++){

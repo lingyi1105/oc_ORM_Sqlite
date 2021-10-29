@@ -17,23 +17,23 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *autoIncrementId; //主键 自增 //ORMDB保留字段
 
 
-@property (nonatomic, assign) NSUInteger subUserId;  //当前子用户id
+@property (nonatomic, assign) NSUInteger userId;  //用户id
+
+@property (nonatomic, strong) NSNumber *mealType;  //0:早餐 1:午餐 2:晚餐 3:其他
+
+@property (nonatomic, assign) long long timestamp; //时间戳
 
 @property (nonatomic, assign) NSUInteger year; //时间
 @property (nonatomic, assign) NSUInteger month; //时间
 @property (nonatomic, assign) NSUInteger day; //时间
 @property (nonatomic, assign) NSUInteger weekOfYear; //时间
-
-@property (nonatomic, copy) NSString *dateString; //日期 yyyy/MM/dd
-
-@property (nonatomic, strong) NSNumber *mealType;  //0:早餐 1:午餐 2:晚餐 3:其他
+@property (nonatomic, copy) NSString *dateString; //日期 @"yyyy-MM-dd"
+@property (nonatomic, copy) NSString *timeString; //时间 @"HH:mm:ss"
 
 
 @property (nonatomic, assign) long long massValueMilligram; //    食物重量质量(毫克单位)
 
 @property (nonatomic, copy) NSString *name; //    "name": "Cheese, cheshire",//食品名称
-
-
 
 
 @end
@@ -46,6 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)remove;
 
 - (instancetype)update;
+
++ (instancetype)getOneByAiid:(NSUInteger)aiid;
+
++ (void)saveList:(NSArray *)list;
+
 
 + (NSArray *)queryListByDateString:(NSString *)dateString andMmealType:(NSNumber *)mealType;
 
