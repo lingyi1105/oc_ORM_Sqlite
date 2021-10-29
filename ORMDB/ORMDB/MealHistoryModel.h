@@ -47,9 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)update;
 
-+ (instancetype)getOneByAiid:(NSUInteger)aiid;
-
 + (void)saveList:(NSArray *)list;
+
++ (instancetype)getOneByAiid:(NSUInteger)aiid;
 
 
 + (NSArray *)queryListByDateString:(NSString *)dateString andMmealType:(NSNumber *)mealType;

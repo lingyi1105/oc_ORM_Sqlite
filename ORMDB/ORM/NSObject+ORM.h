@@ -105,9 +105,7 @@
 
 /**
     只返回 一行查询结果，通过字段名字取值
- 
-    NSMutableDictionary *result= [XXX queryForDictionaryWhere:@"id = 1"];
- 
+    NSMutableDictionary *result= [CLS queryForDictionaryWhere:@"id = 1"];
     result[@"columnName"];
  */
 + (NSMutableDictionary *)queryForDictionaryWhere:(NSString *)requirement;
@@ -120,9 +118,7 @@
 
 /**
 	只返回 一行查询结果，通过字段名字取值
- 
-	NSMutableDictionary *result= [XXX queryForDictionary:@"select * from User"];
- 
+	NSMutableDictionary *result= [CLS queryForDictionary:@"select * from User"];
 	result[@"columnName"];
  */
 + (NSMutableDictionary *)queryForDictionary:(NSString *)sql DEPRECATED_MSG_ATTRIBUTE("use queryForDictionaryWithRawSQL instead");
@@ -130,13 +126,13 @@
 
 /**
 	返回 数量count
-	NSUInteger count = [ELBNFSMealHistoryModel count:@"*" where:@"day = 22"];
+	NSUInteger count = [CLS count:@"*" where:@"day = 22"];
  */
 + (NSUInteger)count:(NSString *)key where:(NSString *)requirement;
 
 /**
 	返回 单个字段sum值
-	NSNumber *sum = [ELBNFSMealHistoryModel sum:@"mealType" where:@"day = 22"];
+	NSNumber *sum = [CLS sum:@"mealType" where:@"day = 22"];
  */
 + (NSNumber *)sum:(NSString *)key where:(NSString *)requirement;
 
