@@ -283,8 +283,7 @@ int main(int argc, const char *argv[]) {
     NSDictionary *dic1 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT strftime('%d - %m  - %Y ','now');"];
     NSDictionary *dic0 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT datetime(1631442609410/1000, 'unixepoch', 'localtime');"];
     NSDictionary *dic00 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT date(1525502284, 'unixepoch', 'localtime');"];
-    NSDictionary *dic000 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT date(1525502284, 'unixepoch', 'localtime');"];
-    NSArray *arr222 = [MealHistoryModel queryForArrayDicWithRawSQL:@"SELECT year,month,day,timestamp, date(timestamp/1000, 'unixepoch', 'localtime') AS date_string, count(*), sum(energy) FROM MealHistoryModel group by date(timestamp/1000, 'unixepoch', 'localtime');"];
+    NSArray *arr222 = [MealHistoryModel queryForArrayDicWithRawSQL:@"SELECT autoIncrementId as id, year, month, day, timestamp, date(timestamp/1000, 'unixepoch', 'localtime') AS date_string, count(*), sum(energy) FROM MealHistoryModel group by date(timestamp/1000, 'unixepoch', 'localtime');"];
     if (arr222.count > 0) {
         NSDictionary *di = arr222[0];
         NSLog(@"di:%@", di);
