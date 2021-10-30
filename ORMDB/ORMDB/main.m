@@ -236,6 +236,12 @@ void createMealHistoryModelDB (int count) {
 int main(int argc, const char *argv[]) {
 @autoreleasepool {
 
+//    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+//    NSInteger unitFlags = NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitWeekday | NSCalendarUnitWeekdayOrdinal | NSCalendarUnitQuarter | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekOfYear | NSCalendarUnitYearForWeekOfYear | NSCalendarUnitNanosecond | NSCalendarUnitCalendar | NSCalendarUnitTimeZone;
+//    NSDateComponents *comps = [calendar components:unitFlags fromDate:[NSDate date]];
+//    NSInteger x = [comps weekday];
+//    NSInteger y = [comps weekdayOrdinal];
+    
     [ORMDB configDBPath:@"/Users/Shared/test.db"];
 
     dispatch_queue_t dispatchQueue = dispatch_queue_create("com.queue.test", DISPATCH_QUEUE_CONCURRENT);
@@ -271,6 +277,23 @@ int main(int argc, const char *argv[]) {
     
     NSNumber *sum = [MealHistoryModel sumWeekly:@"energy" byDate:[NSDate date]];
     NSLog(@"sum: %@", sum);
+    
+    //高级查询
+    NSDictionary *dic = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT strftime('%s','now');"];
+    NSDictionary *dic1 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT strftime('%d - %m  - %Y ','now');"];
+    NSDictionary *dic0 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT datetime(1631442609410/1000, 'unixepoch', 'localtime');"];
+    NSDictionary *dic00 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT date(1525502284, 'unixepoch', 'localtime');"];
+    NSDictionary *dic000 = [MealHistoryModel queryForDictionaryWithRawSQL:@"SELECT date(1525502284, 'unixepoch', 'localtime');"];
+    NSArray *arr222 = [MealHistoryModel queryForArrayDicWithRawSQL:@"SELECT year,month,day,timestamp, date(timestamp/1000, 'unixepoch', 'localtime') AS date_string, count(*), sum(energy) FROM MealHistoryModel group by date(timestamp/1000, 'unixepoch', 'localtime');"];
+    if (arr222.count > 0) {
+        NSDictionary *di = arr222[0];
+        NSLog(@"di:%@", di);
+    }
+    NSArray *arrrr = [MealHistoryModel queryForArrayDicWithRawSQL:@"SELECT * FROM MealHistoryModel"];
+    if (arrrr.count > 0) {
+        NSDictionary *d = arrrr[0];
+        NSLog(@"d:%@", d);
+    }
     
 #endif
 

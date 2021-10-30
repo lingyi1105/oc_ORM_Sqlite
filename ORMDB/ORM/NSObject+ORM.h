@@ -125,6 +125,12 @@
 + (NSMutableDictionary *)queryForDictionaryWithRawSQL:(NSString *)sql;
 
 /**
+    返回 所有结果 字典 的 数组
+    NSMutableArray<NSMutableDictionary *> *result= [CLS queryForDictionary:@"select * from User"];
+ */
++ (NSMutableArray<NSMutableDictionary *> *)queryForArrayDicWithRawSQL:(NSString *)sql;
+
+/**
 	返回 数量count
 	NSUInteger count = [CLS count:@"*" where:@"day = 22"];
  */

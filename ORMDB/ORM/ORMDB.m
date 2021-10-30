@@ -323,6 +323,43 @@ static dispatch_once_t onceToken;
     return arr;
 }
 
++ (NSMutableArray<NSMutableDictionary *> *)queryArrayDicWithSql:(NSString *)sql {
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    sqlite3 *queryDB;
+    sqlite3_stmt *statement;
+    if (sqlite3_open([DBPath UTF8String], &queryDB) == SQLITE_OK && (sqlite3_prepare_v2(queryDB, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)) {
+        int columnCount = sqlite3_column_count(statement);
+        while (sqlite3_step(statement) == SQLITE_ROW) {
+            NSMutableDictionary *returnDic = [[NSMutableDictionary alloc] init];
+            for (int i = 0; i < columnCount; i++) {
+                id returnValue = nil;
+                NSString *columnName = [NSString stringWithUTF8String:sqlite3_column_name(statement, i)];
+                int columnType = sqlite3_column_type(statement, i);
+                if (columnType == SQLITE_INTEGER) {
+                    returnValue = [NSNumber numberWithLongLong:sqlite3_column_int64(statement, i)];
+                } else if (columnType == SQLITE_FLOAT) {
+                    returnValue = [NSNumber numberWithDouble:sqlite3_column_double(statement, i)];
+                } else {
+                    const char *c = (char *) sqlite3_column_text(statement, i);
+                    if (!c) {
+                        c = "";
+                    }
+                    returnValue = [[NSString alloc] initWithCString:c encoding:NSUTF8StringEncoding];
+                }
+
+                if (returnValue) {
+                    [returnDic setObject:returnValue forKey:columnName];
+                }
+            }
+            
+            [arr addObject:[returnDic copy]];
+        }
+        sqlite3_finalize(statement);
+        sqlite3_close(queryDB);
+    }
+    return arr;
+}
+
 + (void)saveObject:(id)entity withSql:(NSString *)sql {
 
     ORMDB *currentSyncQueue = (__bridge id) dispatch_get_specific(kDispatchQueueSpecificKey);

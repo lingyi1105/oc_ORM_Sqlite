@@ -41,6 +41,11 @@
  **/
 + (NSMutableArray *)queryDB:(Class)cls andSql:(NSString *)sql;
 
+/**
+ 自定义查询
+ **/
++ (NSMutableArray<NSMutableDictionary *> *)queryArrayDicWithSql:(NSString *)sql;
+
 + (void)execsql:(NSString *)sql;
 
 + (void)saveObject:(id)object withSql:(NSString *)sql;

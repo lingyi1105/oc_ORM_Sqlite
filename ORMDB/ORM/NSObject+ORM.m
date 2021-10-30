@@ -138,6 +138,10 @@ static dispatch_once_t onceToken;
     return [ORMDB queryWithSql:sql];
 }
 
++ (NSMutableArray<NSMutableDictionary *> *)queryForArrayDicWithRawSQL:(NSString *)sql {
+    return [ORMDB queryArrayDicWithSql:sql];
+}
+
 + (NSUInteger)count:(NSString *)key where:(NSString *)requirement {
     if (key == nil || requirement.length == 0) {
         key = @"autoIncrementId";

@@ -296,21 +296,23 @@ static force_inline ORMDBDataType ORMDBGetDataType(const char *typeEncoding) {
     [ORMDB execsql:sql];
     [ORMDB commitTransaction];
 
-    NSArray * columns = [ORMDB columns:NSStringFromClass(cls)];
-    for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
-        if ([info.name isEqualToString:@"autoIncrementId"]) {
-            continue;
-        }
-        if (info.foreignTableName) {
-            continue;
-        }
-        if (info.protocol) {
-            continue;
-        } else if (info.type == ORMDBDataTypeUnknown && info.cls) {
-            continue;
-        }
-        if (![columns containsObject:info.name]) {
-            [self addColumn:info table:cls];
+    NSArray *columns = [ORMDB columns:NSStringFromClass(cls)];
+    if (columns.count > 0) {
+        for (ORMDBClassPropertyInfo *info in obj.propertyInfos) {
+            if ([info.name isEqualToString:@"autoIncrementId"]) {
+                continue;
+            }
+            if (info.foreignTableName) {
+                continue;
+            }
+            if (info.protocol) {
+                continue;
+            } else if (info.type == ORMDBDataTypeUnknown && info.cls) {
+                continue;
+            }
+            if (![columns containsObject:info.name]) {
+                [self addColumn:info table:cls];
+            }
         }
     }
 }
